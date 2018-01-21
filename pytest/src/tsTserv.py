@@ -17,10 +17,11 @@ while True:
     print('...connected from:',addr)
     
     while True:
-        data=tcpCliSock.recv(BUFSIZ)
+        data=tcpCliSock.recv(BUFSIZ).decode()
         if not data:
             break
-        tcpCliSock.send('[%s] %s' % (
-            bytes(ctime(),'utf-8'),data))
-        tcpCliSock.close()
-    tcpSerSock.close()
+        tcpCliSock.send(('[%s] %s' % (
+            bytes(ctime(),'utf-8'),data)).encode())
+    tcpCliSock.close()
+
+tcpSerSock.close()
