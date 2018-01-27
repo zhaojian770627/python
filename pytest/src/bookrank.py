@@ -17,7 +17,7 @@ def getRanking(isbn):
     page=request.urlopen('%s%s' %(AMZN,isbn))
     data=page.read()
     page.close()
-    return REGEX.findall(data)[0]
+    return REGEX.findall(data.decode('utf-8'))[0]
 
 def _showRanking(isbn):
     print('- %r ranked %s' %(ISBNs[isbn],getRanking(isbn)))
