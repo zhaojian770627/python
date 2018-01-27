@@ -25,7 +25,8 @@ def _showRanking(isbn):
 def main():
     print('At',ctime(),'on Amazon...')
     for isbn in ISBNs:
-        _showRanking(isbn)
+        #_showRanking(isbn)
+        Thread(target=_showRanking,args=(isbn,)).start()
         
 @register
 def _atexit():
