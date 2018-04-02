@@ -1,9 +1,18 @@
 #!/usr/bin/env python
 import numpy as np;
 
-a = [1,2,3]
-b = [4,5,6]
-c = [7,8,9]
-zipped = zip(a,b,c)
-for z in zipped:
-    print(z)
+
+def sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))
+
+
+def feedforward(biases, weights, a):
+    for b, w in zip(biases, weights):
+        a = sigmoid(np.dot(w, a) + b)
+    return a
+
+    
+data = [1, 2, 3]
+ary = np.array(data)
+result = sigmoid(ary)
+print(result)
