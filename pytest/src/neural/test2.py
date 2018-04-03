@@ -11,8 +11,19 @@ def feedforward(biases, weights, a):
         a = sigmoid(np.dot(w, a) + b)
     return a
 
-    
-data = [1, 2, 3]
-ary = np.array(data)
-result = sigmoid(ary)
-print(result)
+sizes = [2, 3, 1]
+biases = [np.random.randn(y, 1) for y in sizes[1:]]
+weights = [np.random.randn(y, x) for x, y in zip(sizes[:-1], sizes[1:])]
+
+print("biases")
+print(biases)
+print("zipped")
+zipped = zip(sizes[:-1], sizes[1:])
+for z in zipped:
+    print(z)
+print("weights")
+print(weights)
+print("----------------------------")
+for b, w in zip(biases, weights):
+    print(b)
+    print(w)
