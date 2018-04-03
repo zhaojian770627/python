@@ -23,7 +23,10 @@ for z in zipped:
     print(z)
 print("weights")
 print(weights)
-print("----------------------------")
+print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 for b, w in zip(biases, weights):
+    print("--------------b-------------")
     print(b)
+    print("--------------w-------------")
     print(w)
+    print("---------------------------")
