@@ -19,7 +19,12 @@ class Network(object):
     def __init__(self, sizes):
         self.num_layers = len(sizes);
         self.sizes = sizes
+        # 从第二层开始
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
+        # x 截止到最后一个(包含)
+        # y 从第一个开始算
+        # 表示每个后续的神经元有几个前面的神经元输入与之连接，
+        # 就是表示每个神经元与之对应的输入的权重
         self.weights = [np.random.randn(y, x) for x, y in zip(sizes[:-1], sizes[1:])]
        
     def feedforward(self, a):
