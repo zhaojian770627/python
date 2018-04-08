@@ -2,6 +2,7 @@
 import random
 import numpy as np;
 
+
 # 神经元的输入函数
 # 1/( 1 + exp(− ∑wx  − b))
 def sigmoid(z):
@@ -12,6 +13,7 @@ def sigmoid(z):
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z) * (1 - sigmoid(z))
+
 
 # 神经网络的代码
 class Network(object):
@@ -122,3 +124,10 @@ class Network(object):
     # 计算计算值和真实值的差值，用来
     def cost_derivative(self, output_activations, y):
         return (output_activations - y)
+    
+    def printbw(self):
+        for b, w in zip(self.biases, self.weights):
+            print("--------------b-------------")
+            print(b)
+            print("--------------w-------------")
+            print(w)
