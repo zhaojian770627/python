@@ -213,5 +213,5 @@ td = list(zip(tdi, tdr))
 
 ttd = list(zip(np.array(tti), np.array(ttr)))
 
-net = network.Network([2, 100, 1]);
+net = network.Network([2, 3, 1]);
 net.SGD(td, 30, 2, 3.0,ttd)
