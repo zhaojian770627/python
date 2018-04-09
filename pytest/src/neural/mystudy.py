@@ -61,7 +61,7 @@ tr = [
         [[0]],
         [[0]],
         [[0]]
-]
+    ]
 
 tdi = np.array(ti);
 tdr = np.array(tr);
