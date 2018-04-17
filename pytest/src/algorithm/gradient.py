@@ -5,12 +5,12 @@
 
 
 def F(x):
-    return x * x - 9;
+    return x * x + 2 * x;
 
 
 # 导数
 def F_prime(x):
-    return 2 * x
+    return 2 * x + 2
 
 
 # 得到下一个X
