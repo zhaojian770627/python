@@ -35,3 +35,5 @@ while E(xn, x) > e:
     xn = Xn(x)
     print("Epoch {0}:x {1} xn {2}".format(i, x, xn))
 
+x = xn
+print("最优解 {0}".format(x))
