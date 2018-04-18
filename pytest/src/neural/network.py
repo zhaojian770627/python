@@ -102,11 +102,11 @@ class Network(object):
             activations.append(activation)
         # 计算增量 activations 最后加入的就是最终的神经元的输出
         # -1 表示最后一个神经元的输出
-        # 这里用到了代价函数对b的求导，见
+        # 这里用到了代价函数对b的求导
         # ---https://blog.csdn.net/chen645096127/article/details/78991014
         delta = self.cost_derivative(activations[-1], y) * sigmoid_prime(zs[-1])
         nabla_b[-1] = delta
-        # 转置
+        # 转置 对w的求偏导，需要乘以在delta乘以x,x即输入
         nabla_w[-1] = np.dot(delta, activations[-2].transpose())
         
         for l in range(2, self.num_layers):
