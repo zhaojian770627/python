@@ -5,12 +5,12 @@
 
 
 def F(x):
-    return x * x + 2 * x;
+    return x * x + x;
 
 
 # 导数
 def F_prime(x):
-    return 2 * x + 2
+    return 2 * x + 1
 
 
 # 得到下一个X
@@ -32,7 +32,7 @@ def E(xn, x):
 eta = 0.001
 x = 10
 xn = 10
-e = 0.000001
+e = 0.00000000001
 
 i = 0
 while True:
