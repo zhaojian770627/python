@@ -101,6 +101,8 @@ class Network(object):
             activation = sigmoid(z)
             activations.append(activation)
         # 计算增量 activations 最后加入的就是最终的神经元的输出
+
+        # 下面求输出层的误差
         # -1 表示最后一个神经元的输出
         # 这里用到了代价函数对b的求导
         # ---https://blog.csdn.net/chen645096127/article/details/78991014
