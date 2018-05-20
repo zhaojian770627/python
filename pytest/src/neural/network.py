@@ -102,20 +102,19 @@ class Network(object):
             activations.append(activation)
         # 计算增量 activations 最后加入的就是最终的神经元的输出
 
-        # 下面求输出层的误差 使用了输出层误差的⽅程
-        # -1 表示最后一个神经元的输出
-        # 这里用到了代价函数对b的求导
-        # ---https://blog.csdn.net/chen645096127/article/details/78991014
+        # 求误差
+        # BP1
         delta = self.cost_derivative(activations[-1], y) * sigmoid_prime(zs[-1])
+        # BP3
         nabla_b[-1] = delta
-        # 转置 对w的求偏导，需要乘以在delta乘以x,x即输入
+        # Bp4
         nabla_w[-1] = np.dot(delta, activations[-2].transpose())
         
         for l in range(2, self.num_layers):
             z = zs[-l]
             # 导数
             sp = sigmoid_prime(z)
-            # 使⽤下⼀层的误差 δl+1 来表⽰当前层的误差 δl
+            # BP2 使⽤下⼀层的误差 δl+1 来表⽰当前层的误差 δl
             delta = np.dot(self.weights[-l + 1].transpose(), delta) * sp
             nabla_b[-l] = delta
             nabla_w[-l] = np.dot(delta, activations[-l - 1].transpose())
