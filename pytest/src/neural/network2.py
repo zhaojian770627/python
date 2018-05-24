@@ -140,6 +140,19 @@ class Network2(object):
             print(w)
 
 net = Network2([1,1]);
+
+ti = [
+        [[0]]
+     ]
+tr = [
+        [[0]]
+     ]
+
+tdi = np.array(ti);
+tdr = np.array(tr);
+
+td = list(zip(tdi, tdr))
+
 # net.backprop(np.array([[1]]), np.array([[0]]));
-net.update_mini_batch([np.array([[1]]), np.array([[0]])], .15)
+net.update_mini_batch(td, .15)
 print('abc');
