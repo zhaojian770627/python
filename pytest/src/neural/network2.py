@@ -140,5 +140,5 @@ class Network2(object):
             print(w)
 
 net = Network2([1,1]);
-net.backprop(1, 0);
+net.backprop(np.array([[1]]), np.array([[0]]));
 print('abc');
