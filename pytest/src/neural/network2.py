@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import random
+
 import numpy as np;
 
 
@@ -142,7 +143,7 @@ class Network2(object):
 net = Network2([1,1]);
 
 ti = [
-        [[0]]
+        [[1]]
      ]
 tr = [
         [[0]]
@@ -155,4 +156,5 @@ td = list(zip(tdi, tdr))
 
 # net.backprop(np.array([[1]]), np.array([[0]]));
 net.update_mini_batch(td, .15)
+net.printbw()
 print('abc');
