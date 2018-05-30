@@ -104,7 +104,9 @@ class Network2(object):
             activation = sigmoid(z)
             activations.append(activation)
         # 计算增量 activations 最后加入的就是最终的神经元的输出
-
+        
+        print(self.cost_derivative(activations[-1], y));
+        
         # 求误差
         # BP1
         delta = self.cost_derivative(activations[-1], y) * sigmoid_prime(zs[-1])
@@ -155,6 +157,5 @@ tdr = np.array(tr);
 td = list(zip(tdi, tdr))
 
 # net.backprop(np.array([[1]]), np.array([[0]]));
-net.update_mini_batch(td, .15)
-net.printbw()
-print('abc');
+for i in range(1,301):
+    net.update_mini_batch(td, .15)
