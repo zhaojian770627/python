@@ -5,11 +5,9 @@ from PIL import Image
 
 import numpy as np
 
-import network
-
 
 def load_data():
-    f = gzip.open('/home/zj/git/neural-networks-and-deep-learning/data/mnist.pkl.gz', 'rb')
+    f = gzip.open('/home/zj/github/neural-networks-and-deep-learning/data/mnist.pkl.gz', 'rb')
     training_data, validation_data, test_data = pickle.load(f, encoding='bytes')
     f.close()
     return (training_data, validation_data, test_data)
@@ -39,7 +37,7 @@ def showimage(image):
     im.show()
 
 
-training_data, validation_data, test_data = load_data_wrapper()
-net = network.Network([784, 30, 10])
-net.SGD(training_data, 30, 10, 3.0, test_data=test_data)
-net.printbw()
+#training_data, validation_data, test_data = load_data_wrapper()
+#net = network.Network([784, 30, 10])
+#net.SGD(training_data, 30, 10, 3.0, test_data=test_data)
+#net.printbw()
