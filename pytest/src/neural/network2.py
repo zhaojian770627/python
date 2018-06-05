@@ -22,7 +22,7 @@ import numpy as np
 
 
 #### Define the quadratic and cross-entropy cost functions
-
+# 二次代价函数
 class QuadraticCost(object):
 
     @staticmethod
@@ -38,7 +38,7 @@ class QuadraticCost(object):
         """Return the error delta from the output layer."""
         return (a-y) * sigmoid_prime(z)
 
-
+# 交叉熵代价函数
 class CrossEntropyCost(object):
 
     @staticmethod

@@ -2,10 +2,4 @@
 import random;
 import numpy as np;
 
-import mnist_loader
-import network2
-
-training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
-net = network2.Network([784, 30, 10], cost=network2.CrossEntropyCost)
-net.large_weight_initializer()
-net.SGD(training_data, 30, 10, 0.5, evaluation_data=test_data, monitor_evaluation_accuracy=True)
+num_epochs = int(input("Enter the number of epochs to run for: "))
