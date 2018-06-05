@@ -22,6 +22,7 @@ import numpy as np
 
 
 #### Define the quadratic and cross-entropy cost functions
+# fn 求代价函数的值
 # 二次代价函数
 class QuadraticCost(object):
 
@@ -31,6 +32,7 @@ class QuadraticCost(object):
         ``y``.
 
         """
+        # linalg.norm 范数
         return 0.5*np.linalg.norm(a-y)**2
 
     @staticmethod
@@ -187,6 +189,7 @@ class Network(object):
         return evaluation_cost, evaluation_accuracy, \
             training_cost, training_accuracy
 
+    # 增加了L2规范化
     def update_mini_batch(self, mini_batch, eta, lmbda, n):
         """Update the network's weights and biases by applying gradient
         descent using backpropagation to a single mini batch.  The
@@ -201,6 +204,7 @@ class Network(object):
             delta_nabla_b, delta_nabla_w = self.backprop(x, y)
             nabla_b = [nb+dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
             nabla_w = [nw+dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
+        # L2规范化
         self.weights = [(1-eta*(lmbda/n))*w-(eta/len(mini_batch))*nw
                         for w, nw in zip(self.weights, nabla_w)]
         self.biases = [b-(eta/len(mini_batch))*nb

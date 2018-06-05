@@ -85,7 +85,7 @@ class Network(object):
         self.biases = [b - (eta / len(mini_batch)) * nb
                      for b, nb in zip(self.biases, nabla_b)]
 
-    # 计算∇C
+    # 计算∇C 反向传播
     def backprop(self, x, y):
         nabla_b = [np.zeros(b.shape) for b in self.biases]
         nabla_w = [np.zeros(w.shape) for w in self.weights]
