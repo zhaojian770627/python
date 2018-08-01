@@ -44,7 +44,6 @@ from theano.tensor.nnet import softmax
 from theano.tensor import shared_randomstreams
 from theano.tensor.signal.pool import pool_2d
 
-
 # Activation functions for neurons
 def linear(z): return z
 
@@ -254,16 +253,19 @@ class FullyConnectedLayer(object):
         self.activation_fn = activation_fn
         self.p_dropout = p_dropout
         # Initialize weights and biases
+        # w 为 n_in 行 n_out 列的分布矩阵
         self.w = theano.shared(
             np.asarray(
                 np.random.normal(
                     loc=0.0, scale=np.sqrt(1.0 / n_out), size=(n_in, n_out)),
                 dtype=theano.config.floatX),
             name='w', borrow=True)
+        # n_out 个 分布变量
         self.b = theano.shared(
             np.asarray(np.random.normal(loc=0.0, scale=1.0, size=(n_out,)),
                        dtype=theano.config.floatX),
             name='b', borrow=True)
+        print(self.b.get_value())
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
