@@ -167,14 +167,14 @@ class Network(object):
         # Do the actual training
         best_validation_accuracy = 0.0
         for epoch in range(epochs):
-            for minibatch_index in range(num_training_batches):
+            for minibatch_index in range(int(num_training_batches)):
                 iteration = num_training_batches * epoch + minibatch_index
                 if iteration % 1000 == 0:
                     print("Training mini-batch number {0}".format(iteration))
                 cost_ij = train_mb(minibatch_index)
                 if (iteration + 1) % num_training_batches == 0:
                     validation_accuracy = np.mean(
-                        [validate_mb_accuracy(j) for j in range(num_validation_batches)])
+                        [validate_mb_accuracy(j) for j in range(int(num_validation_batches))])
                     print("Epoch {0}: validation accuracy {1:.2%}".format(
                         epoch, validation_accuracy))
                     if validation_accuracy >= best_validation_accuracy:
@@ -183,7 +183,7 @@ class Network(object):
                         best_iteration = iteration
                         if test_data:
                             test_accuracy = np.mean(
-                                [test_mb_accuracy(j) for j in range(num_test_batches)])
+                                [test_mb_accuracy(j) for j in range(int(num_test_batches))])
                             print('The corresponding test accuracy is {0:.2%}'.format(
                                 test_accuracy))
         print("Finished training network.")
