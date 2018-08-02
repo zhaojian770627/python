@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-import random;
-import numpy as np;
-import network2
-import mnist_loader
+import theano;
+import theano.tensor as T
 
-c=5
-print(c//10)
+x = T.fscalar('x')
+y = T.fscalar('y')
+z = x ** 2 + y ** 2
+grads = theano.grad(z, [x, y])
+print(len(grads))
