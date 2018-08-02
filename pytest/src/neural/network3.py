@@ -123,6 +123,7 @@ class Network(object):
         num_test_batches = size(test_data) / mini_batch_size
 
         # define the (regularized) cost function, symbolic gradients, and updates
+        # L2 规范化
         l2_norm_squared = sum([(layer.w ** 2).sum() for layer in self.layers])
         cost = self.layers[-1].cost(self) + \
                0.5 * lmbda * l2_norm_squared / num_training_batches
