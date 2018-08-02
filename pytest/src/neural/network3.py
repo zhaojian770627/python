@@ -244,7 +244,7 @@ class ConvPoolLayer(object):
             pooled_out + self.b.dimshuffle('x', 0, 'x', 'x'))
         self.output_dropout = self.output  # no dropout in the convolutional layers
 
-
+# 全连接的网络
 class FullyConnectedLayer(object):
 
     def __init__(self, n_in, n_out, activation_fn=sigmoid, p_dropout=0.0):
