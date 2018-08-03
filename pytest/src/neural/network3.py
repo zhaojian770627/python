@@ -272,6 +272,7 @@ class FullyConnectedLayer(object):
         self.inpt = inpt.reshape((mini_batch_size, self.n_in))
         self.output = self.activation_fn(
             (1 - self.p_dropout) * T.dot(self.inpt, self.w) + self.b)
+        theano.printing.debugprint(self.output)
         self.y_out = T.argmax(self.output, axis=1)
         self.inpt_dropout = dropout_layer(
             inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
