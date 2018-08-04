@@ -1,0 +1,1 @@
+theano.printing.debugprint(self.inpt)
