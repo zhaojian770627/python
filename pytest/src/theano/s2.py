@@ -7,6 +7,7 @@ from theano.tensor.nnet import sigmoid
 n_in = 784
 n_out = 100
 mini_batch_size = 10
+p_dropout = 0
 
 w = theano.shared(
             np.asarray(
@@ -23,6 +24,7 @@ x = T.matrix("x")
 inpt = x.reshape((mini_batch_size, n_in))
 print(theano.printing.debugprint(inpt))
 theano.printing.pydotprint(inpt, "./a.png")
+output = sigmoid((1 - p_dropout) * T.dot(inpt, w) + b)
 # output = sigmoid([.1])
 # f = theano.function([], output)  
 # f()
