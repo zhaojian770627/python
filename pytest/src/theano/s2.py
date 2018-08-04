@@ -3,6 +3,15 @@ import theano
 import theano.tensor as T
 
 from theano.tensor.nnet import sigmoid
+from theano.tensor import shared_randomstreams
+
+
+def dropout_layer(layer, p_dropout):
+    srng = shared_randomstreams.RandomStreams(
+        np.random.RandomState(0).randint(999999))
+    mask = srng.binomial(n=1, p=1 - p_dropout, size=layer.shape)
+    return layer * T.cast(mask, theano.config.floatX)
+
 
 n_in = 784
 n_out = 100
@@ -22,9 +31,13 @@ b = theano.shared(
 
 x = T.matrix("x")
 inpt = x.reshape((mini_batch_size, n_in))
-theano.printing.pydotprint(inpt, "./a.png")
 output = sigmoid((1 - p_dropout) * T.dot(inpt, w) + b)
-print(theano.printing.debugprint(output))
+theano.printing.pydotprint(output, "./a.png")
+y_out = T.argmax(output, axis=1)
+inpt_dropout = dropout_layer(x.reshape((mini_batch_size, n_in)), p_dropout)
+
+print(theano.printing.debugprint(y_out))
+theano.printing.pydotprint(y_out, "./b.png")
 # output = sigmoid([.1])
 # f = theano.function([], output)  
 # f()
