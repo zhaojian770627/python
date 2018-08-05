@@ -44,6 +44,7 @@ from theano.tensor.nnet import softmax
 from theano.tensor import shared_randomstreams
 from theano.tensor.signal.pool import pool_2d
 
+
 # Activation functions for neurons
 def linear(z): return z
 
@@ -68,7 +69,7 @@ else:
 
 
 #### Load the MNIST data
-def load_data_shared(filename="/home/zj/github/neural-networks-and-deep-learning/data/mnist.pkl.gz"):
+def load_data_shared(filename="/home/zj/git/neural-networks-and-deep-learning/data/mnist.pkl.gz"):
     f = gzip.open(filename, 'rb')
     training_data, validation_data, test_data = pickle.load(f, encoding='bytes')
     f.close()
@@ -245,6 +246,7 @@ class ConvPoolLayer(object):
             pooled_out + self.b.dimshuffle('x', 0, 'x', 'x'))
         self.output_dropout = self.output  # no dropout in the convolutional layers
 
+
 # 全连接的网络
 class FullyConnectedLayer(object):
 
@@ -252,28 +254,39 @@ class FullyConnectedLayer(object):
         self.n_in = n_in
         self.n_out = n_out
         self.activation_fn = activation_fn
+        # 弃权技术用，用于过度拟合化
         self.p_dropout = p_dropout
         # Initialize weights and biases
-        # w 为 n_in 行 n_out 列的分布矩阵
+        # w 为 n_in 行 n_out 列的正态随机分布矩阵
+        # n_in=784, 输入784 n_out=100 100 个神经元
+        # 最终得到 784 * 100 的矩阵
         self.w = theano.shared(
             np.asarray(
                 np.random.normal(
                     loc=0.0, scale=np.sqrt(1.0 / n_out), size=(n_in, n_out)),
                 dtype=theano.config.floatX),
             name='w', borrow=True)
-        # n_out 个 分布变量
+        # n_out=100 个 正态分布变量
+        # b 为 100*1 的矩阵
         self.b = theano.shared(
             np.asarray(np.random.normal(loc=0.0, scale=1.0, size=(n_out,)),
                        dtype=theano.config.floatX),
             name='b', borrow=True)
+        # w b放在 params 中
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
+        # 设定输入变量，每批量10个样本
+        # 形成 10 * 784 列的矩阵 这里 mini_batch_size 10 n_in 784 
         self.inpt = inpt.reshape((mini_batch_size, self.n_in))
+        # z=@(w,b,x) w*x+b
+        # 设定 output= sigmoid( (1-p_dropout) *  dot(inpt,w) +b )
+        # 1-p_dropout 不是很明白
         self.output = self.activation_fn(
             (1 - self.p_dropout) * T.dot(self.inpt, self.w) + self.b)
-        theano.printing.debugprint(self.output)
+        # 返回axis轴上最大值的索引
         self.y_out = T.argmax(self.output, axis=1)
+        # inpt_dropout 为 10 * 784 矩阵
         self.inpt_dropout = dropout_layer(
             inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
         self.output_dropout = self.activation_fn(
