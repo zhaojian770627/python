@@ -103,6 +103,7 @@ class Network(object):
         self.x = T.matrix("x")
         self.y = T.ivector("y")
         init_layer = self.layers[0]
+        # 将输⼊ self.x 传了两次，可能会以两种⽅式（有dropout 和⽆ dropout）使⽤⽹络
         init_layer.set_inpt(self.x, self.x, self.mini_batch_size)
         for j in range(1, len(self.layers)):
             prev_layer, layer = self.layers[j - 1], self.layers[j]
@@ -126,8 +127,10 @@ class Network(object):
         # define the (regularized) cost function, symbolic gradients, and updates
         # L2 规范化
         l2_norm_squared = sum([(layer.w ** 2).sum() for layer in self.layers])
+    
         cost = self.layers[-1].cost(self) + \
                0.5 * lmbda * l2_norm_squared / num_training_batches
+        
         grads = T.grad(cost, self.params)
         updates = [(param, param - eta * grad)
                    for param, grad in zip(self.params, grads)]
@@ -195,6 +198,7 @@ class Network(object):
 #### Define layer types
 
 
+# 卷积及混合层，这里组合到了一起
 class ConvPoolLayer(object):
     """Used to create a combination of a convolutional and a max-pooling
     layer.  A more sophisticated implementation would separate the
@@ -286,9 +290,10 @@ class FullyConnectedLayer(object):
             (1 - self.p_dropout) * T.dot(self.inpt, self.w) + self.b)
         # 返回axis轴上最大值的索引
         self.y_out = T.argmax(self.output, axis=1)
-        # inpt_dropout 为 10 * 784 矩阵
+        # inpt_dropout 为 10 * 784 矩阵 对输入进行弃权
         self.inpt_dropout = dropout_layer(
             inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
+        # 对于弃权后的输入计算 z=@(w,b,x) w*x+b 
         self.output_dropout = self.activation_fn(
             T.dot(self.inpt_dropout, self.w) + self.b)
 
@@ -297,6 +302,7 @@ class FullyConnectedLayer(object):
         return T.mean(T.eq(y, self.y_out))
 
 
+# softmax层，这一层始终放到最后
 class SoftmaxLayer(object):
 
     def __init__(self, n_in, n_out, p_dropout=0.0):
@@ -318,8 +324,10 @@ class SoftmaxLayer(object):
         self.y_out = T.argmax(self.output, axis=1)
         self.inpt_dropout = dropout_layer(
             inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
+        # softmax 分类函数
         self.output_dropout = softmax(T.dot(self.inpt_dropout, self.w) + self.b)
 
+    # 代价
     def cost(self, net):
         "Return the log-likelihood cost."
         return -T.mean(T.log(self.output_dropout)[T.arange(net.y.shape[0]), net.y])
@@ -335,8 +343,12 @@ def size(data):
     return data[0].get_value(borrow=True).shape[0]
 
 
+# 生成弃权矩阵表达式
 def dropout_layer(layer, p_dropout):
+    # 产生随机数
     srng = shared_randomstreams.RandomStreams(
         np.random.RandomState(0).randint(999999))
+    # 生成非0即1的矩阵mask，矩阵的规模和layer相同
     mask = srng.binomial(n=1, p=1 - p_dropout, size=layer.shape)
+    # 掩码矩阵和输入矩阵相乘，得到弃权后的矩阵
     return layer * T.cast(mask, theano.config.floatX)
