@@ -1,1 +1,3 @@
-theano.printing.debugprint(self.inpt)
+print(theano.printing.debugprint(self.output_dropout))
+theano.printing.pydotprint(self.output_dropout, "./a.png")
+        raise RuntimeError('testError')

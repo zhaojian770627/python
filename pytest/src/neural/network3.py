@@ -327,7 +327,7 @@ class SoftmaxLayer(object):
         # softmax 分类函数
         self.output_dropout = softmax(T.dot(self.inpt_dropout, self.w) + self.b)
 
-    # 代价
+    # 平均代价
     def cost(self, net):
         "Return the log-likelihood cost."
         return -T.mean(T.log(self.output_dropout)[T.arange(net.y.shape[0]), net.y])
