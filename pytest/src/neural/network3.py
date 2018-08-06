@@ -138,6 +138,7 @@ class Network(object):
         # define functions to train a mini-batch, and to compute the
         # accuracy in validation and test mini-batches.
         i = T.lscalar()  # mini-batch index
+        # 定义函数
         train_mb = theano.function(
             [i], cost, updates=updates,
             givens={

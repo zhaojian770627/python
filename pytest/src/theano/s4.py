@@ -2,6 +2,8 @@ import numpy as np
 import theano
 import theano.tensor as T
 
+from theano import function
+
 n_in = 784
 n_out = 100
 mini_batch_size = 2
@@ -15,3 +17,7 @@ w = theano.shared(
                 dtype=theano.config.floatX),
             name='w', borrow=True)
 print(type(w))
+i = T.lscalar()
+y = i * 2
+f = function([i], y)
+print(f([1]))
