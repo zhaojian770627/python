@@ -1,0 +1,69 @@
+Elemwise{add,no_inplace} [id A] ''   
+ |Elemwise{neg,no_inplace} [id B] ''   
+ | |Elemwise{true_div,no_inplace} [id C] 'mean'   
+ |   |Sum{acc_dtype=float64} [id D] ''   
+ |   | |AdvancedSubtensor [id E] ''   
+ |   |   |Elemwise{log,no_inplace} [id F] ''   
+ |   |   | |Softmax [id G] ''   
+ |   |   |   |Elemwise{add,no_inplace} [id H] ''   
+ |   |   |     |dot [id I] ''   
+ |   |   |     | |Elemwise{mul,no_inplace} [id J] ''   
+ |   |   |     | | |Reshape{2} [id K] ''   
+ |   |   |     | | | |sigmoid [id L] ''   
+ |   |   |     | | | | |Elemwise{add,no_inplace} [id M] ''   
+ |   |   |     | | | |   |dot [id N] ''   
+ |   |   |     | | | |   | |Elemwise{mul,no_inplace} [id O] ''   
+ |   |   |     | | | |   | | |Reshape{2} [id P] ''   
+ |   |   |     | | | |   | | | |x [id Q]
+ |   |   |     | | | |   | | | |TensorConstant{[ 10 784]} [id R]
+ |   |   |     | | | |   | | |Elemwise{Cast{float32}} [id S] ''   
+ |   |   |     | | | |   | |   |RandomFunction{binomial}.1 [id T] ''   
+ |   |   |     | | | |   | |     |<RandomStateType> [id U]
+ |   |   |     | | | |   | |     |Shape [id V] ''   
+ |   |   |     | | | |   | |     | |Reshape{2} [id P] ''   
+ |   |   |     | | | |   | |     |TensorConstant{1} [id W]
+ |   |   |     | | | |   | |     |TensorConstant{1.0} [id X]
+ |   |   |     | | | |   | |w [id Y]
+ |   |   |     | | | |   |InplaceDimShuffle{x,0} [id Z] ''   
+ |   |   |     | | | |     |b [id BA]
+ |   |   |     | | | |TensorConstant{[ 10 100]} [id BB]
+ |   |   |     | | |Elemwise{Cast{float32}} [id BC] ''   
+ |   |   |     | |   |RandomFunction{binomial}.1 [id BD] ''   
+ |   |   |     | |     |<RandomStateType> [id BE]
+ |   |   |     | |     |Shape [id BF] ''   
+ |   |   |     | |     | |Reshape{2} [id K] ''   
+ |   |   |     | |     |TensorConstant{1} [id W]
+ |   |   |     | |     |TensorConstant{1.0} [id X]
+ |   |   |     | |w [id BG]
+ |   |   |     |InplaceDimShuffle{x,0} [id BH] ''   
+ |   |   |       |b [id BI]
+ |   |   |ARange{dtype='int64'} [id BJ] ''   
+ |   |   | |TensorConstant{0} [id BK]
+ |   |   | |Subtensor{int64} [id BL] ''   
+ |   |   | | |Shape [id BM] ''   
+ |   |   | | | |y [id BN]
+ |   |   | | |Constant{0} [id BO]
+ |   |   | |TensorConstant{1} [id W]
+ |   |   |y [id BN]
+ |   |Subtensor{int64} [id BP] ''   
+ |     |Elemwise{Cast{float32}} [id BQ] ''   
+ |     | |Shape [id BR] ''   
+ |     |   |AdvancedSubtensor [id E] ''   
+ |     |Constant{0} [id BS]
+ |Elemwise{true_div,no_inplace} [id BT] ''   
+   |Elemwise{mul,no_inplace} [id BU] ''   
+   | |TensorConstant{0.0} [id BV]
+   | |Elemwise{add,no_inplace} [id BW] ''   
+   |   |Elemwise{add,no_inplace} [id BX] ''   
+   |   | |TensorConstant{0} [id BK]
+   |   | |Sum{acc_dtype=float64} [id BY] ''   
+   |   |   |Elemwise{pow,no_inplace} [id BZ] ''   
+   |   |     |w [id Y]
+   |   |     |InplaceDimShuffle{x,x} [id CA] ''   
+   |   |       |TensorConstant{2} [id CB]
+   |   |Sum{acc_dtype=float64} [id CC] ''   
+   |     |Elemwise{pow,no_inplace} [id CD] ''   
+   |       |w [id BG]
+   |       |InplaceDimShuffle{x,x} [id CE] ''   
+   |         |TensorConstant{2} [id CB]
+   |TensorConstant{5000.0} [id CF]

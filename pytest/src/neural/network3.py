@@ -69,7 +69,7 @@ else:
 
 
 #### Load the MNIST data
-def load_data_shared(filename="/home/zj/git/neural-networks-and-deep-learning/data/mnist.pkl.gz"):
+def load_data_shared(filename="/home/zj/github/neural-networks-and-deep-learning/data/mnist.pkl.gz"):
     f = gzip.open(filename, 'rb')
     training_data, validation_data, test_data = pickle.load(f, encoding='bytes')
     f.close()
@@ -127,7 +127,8 @@ class Network(object):
         # define the (regularized) cost function, symbolic gradients, and updates
         # L2 规范化
         l2_norm_squared = sum([(layer.w ** 2).sum() for layer in self.layers])
-    
+        
+        # cost定义为最后一层 SoftmaxLayer 的代价函数
         cost = self.layers[-1].cost(self) + \
                0.5 * lmbda * l2_norm_squared / num_training_batches
         

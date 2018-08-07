@@ -1,3 +1,13 @@
 print(theano.printing.debugprint(self.output_dropout))
 theano.printing.pydotprint(self.output_dropout, "./a.png")
         raise RuntimeError('testError')
+        
+        
+cost:
+    -T.mean(T.log(self.output_dropout)[T.arange(net.y.shape[0]), net.y])
+output_dropout:
+    softmax(T.dot(self.inpt_dropout, self.w) + self.b)
+inpt_dropout:
+    dropout_layer(inpt_dropout.reshape((mini_batch_size, self.n_in)), self.p_dropout)
+inpt_dropout:
+    prev_layer.output_dropout
