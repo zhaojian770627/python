@@ -103,10 +103,12 @@ class Network(object):
         self.x = T.matrix("x")
         self.y = T.ivector("y")
         init_layer = self.layers[0]
+        # 设置第一层的输入及输出
         # 将输⼊ self.x 传了两次，可能会以两种⽅式（有dropout 和⽆ dropout）使⽤⽹络
         init_layer.set_inpt(self.x, self.x, self.mini_batch_size)
         for j in range(1, len(self.layers)):
             prev_layer, layer = self.layers[j - 1], self.layers[j]
+            # 设置第一层之后的输入为上一层的输出
             layer.set_inpt(
                 prev_layer.output, prev_layer.output_dropout, self.mini_batch_size)
         self.output = self.layers[-1].output
@@ -288,6 +290,7 @@ class FullyConnectedLayer(object):
         # z=@(w,b,x) w*x+b
         # 设定 output= sigmoid( (1-p_dropout) *  dot(inpt,w) +b )
         # 1-p_dropout 不是很明白
+        # [ 10 * 784 ] DOT [ 784 * 100 ] --> [10*100]  
         self.output = self.activation_fn(
             (1 - self.p_dropout) * T.dot(self.inpt, self.w) + self.b)
         # 返回axis轴上最大值的索引
@@ -321,6 +324,8 @@ class SoftmaxLayer(object):
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
+        # 设定输入变量，每批量10个样本
+        # 形成 10 * 100 列的矩阵 这里 mini_batch_size 10 n_in 100 
         self.inpt = inpt.reshape((mini_batch_size, self.n_in))
         self.output = softmax((1 - self.p_dropout) * T.dot(self.inpt, self.w) + self.b)
         self.y_out = T.argmax(self.output, axis=1)
