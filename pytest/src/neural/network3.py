@@ -39,7 +39,8 @@ import gzip
 import numpy as np
 import theano
 import theano.tensor as T
-from theano.tensor.nnet import conv
+# from theano.tensor.nnet import conv
+from theano.tensor.nnet import conv2d
 from theano.tensor.nnet import softmax
 from theano.tensor import shared_randomstreams
 from theano.tensor.signal.pool import pool_2d
@@ -69,7 +70,7 @@ else:
 
 
 #### Load the MNIST data
-def load_data_shared(filename="/home/zj/github/neural-networks-and-deep-learning/data/mnist.pkl.gz"):
+def load_data_shared(filename="/home/zj/git/neural-networks-and-deep-learning/data/mnist.pkl.gz"):
     f = gzip.open(filename, 'rb')
     training_data, validation_data, test_data = pickle.load(f, encoding='bytes')
     f.close()
@@ -135,15 +136,9 @@ class Network(object):
                0.5 * lmbda * l2_norm_squared / num_training_batches
         
         # 计算梯度及导数，params包含各层的w b,注意是不同的w b
-        # grads[0] 对第一层w b的导数 grads[1] 对第二层w b的导数 以此类推
+        # grads[0] 对第一层w b的导数 grads[1] 对第二层w b的导数,虽然名字一样，但不是同样的东西
+        # theano会生成整体的表达式 以此类推
         grads = T.grad(cost, self.params)
-        print("---------------g0------------------")
-        print(theano.printing.debugprint(grads[0]))
-        theano.printing.pydotprint(grads[0], "./g1.png")
-        print("---------------g1------------------")
-        print(theano.printing.debugprint(grads[1]))
-        theano.printing.pydotprint(grads[1], "./g2.png")
-        raise RuntimeError('testError')
         
         updates = [(param, param - eta * grad)
                    for param, grad in zip(self.params, grads)]
@@ -235,12 +230,20 @@ class ConvPoolLayer(object):
         x pooling sizes.
 
         """
+        # filter_shape=(20, 1, 5, 5)
         self.filter_shape = filter_shape
+        # image_shape=(mini_batch_size, 1, 28, 28)
         self.image_shape = image_shape
+        # poolsize=(2, 2)
         self.poolsize = poolsize
+        # activation_fn=sigmoid --> 1/(1+exp(-z))
         self.activation_fn = activation_fn
         # initialize weights and biases
+        # n_out=125
+        # 20 * (5 * 5 ) / 4
         n_out = (filter_shape[0] * np.prod(filter_shape[2:]) / np.prod(poolsize))
+        # w 为 20*1*5*5 矩阵 
+        # 20 个特征 每个特征只对应一个输入映射 过滤器为5*5 局部感受野
         self.w = theano.shared(
             np.asarray(
                 np.random.normal(loc=0, scale=np.sqrt(1.0 / n_out), size=filter_shape),
@@ -254,12 +257,13 @@ class ConvPoolLayer(object):
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
+        # 10 * 1 *28 * 28 每批10个样本，每个样本一副图像，每个图像为28*28像素的数据
         self.inpt = inpt.reshape(self.image_shape)
-        conv_out = conv.conv2d(
+        conv_out = conv2d(
             input=self.inpt, filters=self.w, filter_shape=self.filter_shape,
-            image_shape=self.image_shape)
+            input_shape=self.image_shape)
         pooled_out = pool_2d(
-            input=conv_out, ds=self.poolsize, ignore_border=True)
+            input=conv_out, ws=self.poolsize, ignore_border=True)
         self.output = self.activation_fn(
             pooled_out + self.b.dimshuffle('x', 0, 'x', 'x'))
         self.output_dropout = self.output  # no dropout in the convolutional layers
