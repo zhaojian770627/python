@@ -130,11 +130,21 @@ class Network(object):
         # L2 规范化
         l2_norm_squared = sum([(layer.w ** 2).sum() for layer in self.layers])
         
-        # cost定义为最后一层 SoftmaxLayer 的代价函数
+        # cost定义为最后一层即总 SoftmaxLayer 的代价函数
         cost = self.layers[-1].cost(self) + \
                0.5 * lmbda * l2_norm_squared / num_training_batches
         
+        # 计算梯度及导数，params包含各层的w b,注意是不同的w b
+        # grads[0] 对第一层w b的导数 grads[1] 对第二层w b的导数 以此类推
         grads = T.grad(cost, self.params)
+        print("---------------g0------------------")
+        print(theano.printing.debugprint(grads[0]))
+        theano.printing.pydotprint(grads[0], "./g1.png")
+        print("---------------g1------------------")
+        print(theano.printing.debugprint(grads[1]))
+        theano.printing.pydotprint(grads[1], "./g2.png")
+        raise RuntimeError('testError')
+        
         updates = [(param, param - eta * grad)
                    for param, grad in zip(self.params, grads)]
 
