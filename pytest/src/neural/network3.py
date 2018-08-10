@@ -259,6 +259,7 @@ class ConvPoolLayer(object):
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
         # 10 * 1 *28 * 28 每批10个样本，每个样本一副图像，每个图像为28*28像素的数据
         self.inpt = inpt.reshape(self.image_shape)
+        # 可以将 w 看做是待训练的滤波器
         conv_out = conv2d(
             input=self.inpt, filters=self.w, filter_shape=self.filter_shape,
             input_shape=self.image_shape)
