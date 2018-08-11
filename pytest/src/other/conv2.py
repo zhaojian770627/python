@@ -14,6 +14,7 @@ import theano.tensor as T
 # Third-party libraries
 # from theano.tensor.nnet import conv
 d = T.dmatrix("d")
+# 第要给参数表示使用几个特征映射
 filter_shape = (2, 1, 2, 2)
 image_shape = (1, 1, 3, 3)
 poolsize = (2, 2)
