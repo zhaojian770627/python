@@ -19,10 +19,11 @@ def file2matrix(filename):
         line = line.strip()
         listFromLine = line.split('\t')
         returnMat[index, :] = listFromLine[0:3]
-        classLabelVector.append(int(listFromLine[-1]))
+        classLabelVector.append(int(listFromLine[-1]))  # ????
         index += 1
     
     return returnMat, classLabelVector
+
 
 # k-近邻算法
 def classify0(inX, dataSet, labels, k):
@@ -39,7 +40,3 @@ def classify0(inX, dataSet, labels, k):
     sortedClassCount = sorted(classCount.items(),
         key=operator.itemgetter(1), reverse=True)
     return sortedClassCount[0][0]    
-
-
-group, labels = createDataSet()
-print(classify0([0, 0], group, labels, 3))
