@@ -25,7 +25,8 @@ def b():
 
     
 def c():
-    kNN.datingClassTest()
+#     kNN.datingClassTest()
+    kNN.classifyPerson()
 
 
 c()
