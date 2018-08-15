@@ -18,8 +18,14 @@ def a():
     plt.ylabel('Liters of Ice Cream Consumed Per Week')
     plt.show()
 
+
 def b():
     datingDataMat, datingLabels = kNN.file2matrix('/home/zj/datingTestSet2.txt')
     kNN.autoNorm(datingDataMat)
+
     
-b()
+def c():
+    kNN.datingClassTest()
+
+
+c()
