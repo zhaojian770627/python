@@ -68,3 +68,15 @@ def datingClassTest():
         if(classifierResult != datingLabels[i]):errorCount += 1.0
     
     print("The total error rate is: %f" % (errorCount / float(numTestVecs)))
+
+
+def classifyPerson():
+    resultList = ['not at all', 'in small doses', 'in large doses']
+    percentAts = float(input("percentage of time spent playing video games?"))
+    ffMiles = float(input("frequent flier miles earned per year?"))
+    iceCream = float(input("liters of ice cream consumed per year?"))
+    datingDataMat, datingLabels = file2matrix('/home/zj/datingTestSet2.txt')
+    normMat, ranges, minVals = autoNorm(datingDataMat)
+    inArr = array([ffMiles, percentAts, iceCream])
+    classifierResult = classify0((inArr - minVals) / ranges, normMat, datingLabels, 3)
+    print("You will probably like this person:", resultList[classifierResult - 1])
