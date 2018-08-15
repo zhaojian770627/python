@@ -22,8 +22,4 @@ def b():
     datingDataMat, datingLabels = kNN.file2matrix('/home/zj/datingTestSet2.txt')
     kNN.autoNorm(datingDataMat)
     
-# b()
-group, labels = kNN.createDataSet()
-print(group)
-print("---------")
-print(group.min(1))
+b()

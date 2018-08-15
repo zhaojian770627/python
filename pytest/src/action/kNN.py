@@ -41,7 +41,8 @@ def classify0(inX, dataSet, labels, k):
         key=operator.itemgetter(1), reverse=True)
     return sortedClassCount[0][0]
 
-# 归一化特征值
+
+# 归一化特征值(规范成0 1之间的值)
 def autoNorm(dataSet):
     minVals = dataSet.min(0)
     maxVals = dataSet.max(0)
