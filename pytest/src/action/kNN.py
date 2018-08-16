@@ -1,8 +1,6 @@
 from numpy import *
 from os import listdir
 import operator
-from fileinput import filename
-from numpy.distutils.npy_pkg_config import files
 
 
 def createDataSet():
