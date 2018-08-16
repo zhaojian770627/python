@@ -28,5 +28,9 @@ def c():
 #     kNN.datingClassTest()
     kNN.classifyPerson()
 
+    
+def d():
+    kNN.handwritingClassTest()
 
-c()
+
+d()

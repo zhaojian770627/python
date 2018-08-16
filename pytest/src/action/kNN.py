@@ -1,6 +1,8 @@
 from numpy import *
+from os import listdir
 import operator
 from fileinput import filename
+from numpy.distutils.npy_pkg_config import files
 
 
 def createDataSet():
@@ -54,6 +56,7 @@ def autoNorm(dataSet):
     normDataSet = normDataSet / tile(ranges, (m, 1))
     return normDataSet, ranges, minVals
 
+
 # 将图像转换为测试图像
 def img2vector(filename):
     returnVect = zeros((1, 1024))
@@ -62,6 +65,8 @@ def img2vector(filename):
         lineStr = fr.readline()
         for j in range(32):
             returnVect[0, 32 * i + j] = int(lineStr[j])
+            
+    return returnVect
 
 
 # 分类器
@@ -90,3 +95,31 @@ def classifyPerson():
     inArr = array([ffMiles, percentAts, iceCream])
     classifierResult = classify0((inArr - minVals) / ranges, normMat, datingLabels, 3)
     print("You will probably like this person:", resultList[classifierResult - 1])
+
+
+def handwritingClassTest():
+    hwLabels = []
+    trainingFileList = listdir('/home/zj/temp/trainingDigits')  # 获取目录内容
+    m = len(trainingFileList)
+    trainingMat = zeros((m, 1024))
+    for i in range(m):
+        # 从文件名解析分类名字         
+        fileNameStr = trainingFileList[i]
+        fileStr = fileNameStr.split('.')[0]
+        classNumStr = int(fileStr.split('_')[0])
+        hwLabels.append(classNumStr)
+        trainingMat[i, :] = img2vector('/home/zj/temp/trainingDigits/%s' % fileNameStr)
+    
+    testFileList = listdir('/home/zj/temp/testDigits')
+    errorCount = 0.0
+    mTest = len(testFileList)
+    for i in range(mTest):
+        fileNameStr = testFileList[i]
+        fileStr = fileNameStr.split('.')[0]
+        classNumStr = int(fileStr.split('_')[0])
+        vectorUnderTest = img2vector('/home/zj/temp/testDigits/%s' % fileNameStr)
+        classifierResult = classify0(vectorUnderTest, trainingMat, hwLabels, classNumStr)
+        print("the classifier came back with:%d,the real answer is:%d" % (classifierResult, classNumStr))
+        if(classifierResult != classNumStr): errorCount += 1.0
+    print("\nthe total number of errors is %d:" % errorCount)
+    print("\nthe total error reate is %f:" % (errorCount / float(mTest)))
