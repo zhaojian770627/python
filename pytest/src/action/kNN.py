@@ -1,5 +1,6 @@
 from numpy import *
 import operator
+from fileinput import filename
 
 
 def createDataSet():
@@ -52,6 +53,15 @@ def autoNorm(dataSet):
     normDataSet = dataSet - tile(minVals, (m, 1))
     normDataSet = normDataSet / tile(ranges, (m, 1))
     return normDataSet, ranges, minVals
+
+# 将图像转换为测试图像
+def img2vector(filename):
+    returnVect = zeros((1, 1024))
+    fr = open(filename)
+    for i in range(32):
+        lineStr = fr.readline()
+        for j in range(32):
+            returnVect[0, 32 * i + j] = int(lineStr[j])
 
 
 # 分类器
