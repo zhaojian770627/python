@@ -5,4 +5,4 @@ import trees
 import matplotlib.pyplot as plt
 
 myDat, labels = trees.createDataSet()
-print(trees.calcShannonEnt(myDat))
+print(trees.splitDataSet(myDat, 0, 1))
