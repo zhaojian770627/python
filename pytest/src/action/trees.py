@@ -36,4 +36,28 @@ def splitDataSet(dataSet, axis, value):
             reducedFeatVec.extend(featVec[axis + 1:])
             retDataSet.append(reducedFeatVec)
     return retDataSet
+
     
+# 选择最好的数据集划分方式
+def chooseBestFeatureToSplit(dataSet):
+    numFeatures = len(dataSet[0]) - 1
+    baseEntropy = calcShannonEnt(dataSet)
+    bestInfoGain = 0.0
+    bestFeature = -1
+    for i in range(numFeatures):
+        # 创建唯一的分类标签列表
+        featList = [example[i] for example in dataSet]
+        uniqueVals = set(featList)
+        newEntropy = 0.0
+        # 计算每种划分方式的信息熵
+        for value in uniqueVals:
+            subDataSet = splitDataSet(dataSet, i, value)
+            prop = len(subDataSet) / float(len(dataSet))
+            newEntropy += prop * calcShannonEnt(subDataSet)
+        infoGain = baseEntropy - newEntropy
+        # 计算最好的信息增益
+        if(infoGain > bestInfoGain):
+            bestInfoGain = infoGain
+            bestFeature = i
+    
+    return bestFeature
