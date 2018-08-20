@@ -69,7 +69,7 @@ def plotTree(myTree, parentPt, nodeTxt):
             plotTree.xOff = plotTree.xOff + 1.0 / plotTree.totalW
             plotNode(secondDict[key], (plotTree.xOff, plotTree.yOff), cntrPt, leafNode)
             plotMidText((plotTree.xOff, plotTree.yOff), cntrPt, str(key))
-        plotTree.yOff = plotTree.yOff + 1.0 / plotTree.totalD
+    plotTree.yOff = plotTree.yOff + 1.0 / plotTree.totalD
         
 
 def createPlot(inTree):
