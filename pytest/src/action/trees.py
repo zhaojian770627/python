@@ -94,6 +94,7 @@ def createTree(dataSet, labels):
     return myTree
 
 
+# 使用决策树的分类函数
 def classify(inputTree, featLabels, testVec):
     firstStr = list(inputTree.keys())[0]
     secondDict = inputTree[firstStr]
