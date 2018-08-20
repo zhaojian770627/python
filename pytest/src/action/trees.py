@@ -95,8 +95,8 @@ def createTree(dataSet, labels):
 
 
 def classify(inputTree, featLabels, testVec):
-    firstStr = inputTree.keys()[0]
-    secondDict = inputTree(firstStr)
+    firstStr = list(inputTree.keys())[0]
+    secondDict = inputTree[firstStr]
     featIndex = featLabels.index(firstStr)
     for key in secondDict.keys():
         if testVec[featIndex] == key:
