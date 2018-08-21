@@ -1,3 +1,4 @@
+# k-邻近算法
 from numpy import *
 from os import listdir
 import operator
