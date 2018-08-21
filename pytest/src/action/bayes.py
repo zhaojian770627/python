@@ -34,6 +34,7 @@ def setOfWords2Vec(vocabList, inputSet):
     return returnVec
 
 
+# trainCategory 是否侮辱性文档
 def trainNB0(trainMatrix, trainCategory):
     numTrainDocs = len(trainMatrix)
     numWords = len(trainMatrix[0])
@@ -45,6 +46,7 @@ def trainNB0(trainMatrix, trainCategory):
     p1Denom = 0.0
     for i in range(numTrainDocs):
         # 向量相加
+        # 如果是侮辱性文档
         if trainCategory[i] == 1:
             p1Num += trainMatrix[i]
             p1Denom += sum(trainMatrix[i])
