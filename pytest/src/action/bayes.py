@@ -65,7 +65,8 @@ def trainNB0(trainMatrix, trainCategory):
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix[i])
     # 防止很小的数相乘，造成为0的情况
-    # 计算　p(ci|w) -- ?
+    # 将该词条的数目除以总词条数目得到条件概率
+    # 计算　p(ci|w) -- ? p1Num->p(w|c)  p1Denom -> p(w)
     p1Vect = log(p1Num / p1Denom)  # change to log()
     p0Vect = log(p0Num / p0Denom)  # change to log()
     return p0Vect, p1Vect, pAbusive
