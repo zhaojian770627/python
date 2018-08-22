@@ -1,9 +1,6 @@
 # 朴素贝叶斯
 # https://blog.csdn.net/mlljava1111/article/details/50512913
 from numpy import *
-from CDROM import CDROM_GET_CAPABILITY
-from pyasn1.type.univ import SetOf
-
 
 def loadDataSet():
     postingList = [['my', 'dog', 'has', 'flea', 'problems', 'help', 'please'],
