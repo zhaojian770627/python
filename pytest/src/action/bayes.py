@@ -1,4 +1,5 @@
 # 朴素贝叶斯
+# https://blog.csdn.net/mlljava1111/article/details/50512913
 from numpy import *
 from CDROM import CDROM_GET_CAPABILITY
 from pyasn1.type.univ import SetOf
@@ -37,10 +38,15 @@ def setOfWords2Vec(vocabList, inputSet):
 
 
 # trainCategory 是否侮辱性文档
+# 输入trainMatrix：词向量数据集
+# 输入trainCategory：数据集对应的类别标签
+# 输出p0Vect：词汇表中各个单词在正常言论中的类条件概率密度
+# 输出p1Vect：词汇表中各个单词在侮辱性言论中的类条件概率密度
+# 输出pAbusive：侮辱性言论在整个数据集中的比例
 def trainNB0(trainMatrix, trainCategory):
     numTrainDocs = len(trainMatrix)
     numWords = len(trainMatrix[0])
-    # 计算p(ci)
+    # 计算p(ci) 属于侮辱性文档的概率
     pAbusive = sum(trainCategory) / float(numTrainDocs)
     # 初始化概率
     # 将所有词的出现数初始化为1,防止出现概率值为0的情况
@@ -49,6 +55,9 @@ def trainNB0(trainMatrix, trainCategory):
     # 并将分母初始化为2
     p0Denom = 2.0
     p1Denom = 2.0
+    # 要遍历训练集trainMatrix中的所有文档。一旦某个词语(侮辱性或正常词语）在某一文档中出现，
+    # 则该词对应的个数(p1Num或者p1Num)就加1，
+    # 而且在所有的文档中，该文档的总词数也相应加1.
     for i in range(numTrainDocs):
         # 向量相加
         # 如果是侮辱性文档,计算
@@ -59,7 +68,7 @@ def trainNB0(trainMatrix, trainCategory):
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix[i])
     # 防止很小的数相乘，造成为0的情况
-    # 计算　p(ci|w)
+    # 计算　p(w|ci) 　p(ci|w) ?
     p1Vect = log(p1Num / p1Denom)  # change to log()
     p0Vect = log(p0Num / p0Denom)  # change to log()
     return p0Vect, p1Vect, pAbusive
