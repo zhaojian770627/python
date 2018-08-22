@@ -40,27 +40,34 @@ def setOfWords2Vec(vocabList, inputSet):
 def trainNB0(trainMatrix, trainCategory):
     numTrainDocs = len(trainMatrix)
     numWords = len(trainMatrix[0])
+    # 计算p(ci)
     pAbusive = sum(trainCategory) / float(numTrainDocs)
     # 初始化概率
+    # 将所有词的出现数初始化为1,防止出现概率值为0的情况
     p0Num = ones(numWords);
     p1Num = ones(numWords)
+    # 并将分母初始化为2
     p0Denom = 2.0
     p1Denom = 2.0
     for i in range(numTrainDocs):
         # 向量相加
-        # 如果是侮辱性文档
+        # 如果是侮辱性文档,计算
         if trainCategory[i] == 1:
-            p1Num += trainMatrix[i]
-            p1Denom += sum(trainMatrix[i])
+            p1Num += trainMatrix[i]  # p(w|ci)
+            p1Denom += sum(trainMatrix[i])  # p(w)
         else:
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix[i])
+    # 防止很小的数相乘，造成为0的情况
+    # 计算　p(ci|w)
     p1Vect = log(p1Num / p1Denom)  # change to log()
     p0Vect = log(p0Num / p0Denom)  # change to log()
     return p0Vect, p1Vect, pAbusive
 
 
+# 朴素贝叶斯分类函数
 def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
+    # 对应元素相乘，然后相加
     p1 = sum(vec2Classify * p1Vec) + log(pClass1)
     p0 = sum(vec2Classify * p0Vec) + log(1.0 - pClass1)
     if p1 > p0:
