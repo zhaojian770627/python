@@ -1,4 +1,5 @@
 import bayes
+import feedparser
 
 # listOPosts, listClasses = bayes.loadDataSet()
 # myVocabList = bayes.createVocabList(listOPosts)
@@ -17,4 +18,8 @@ import bayes
 # bayes.testingNB()
 # emailText = open('/home/zj/sourcecode/machinelearninginaction/Ch04/email/ham/6.txt', encoding="latin-1").read()
 # print(emailText)
-bayes.spamTest()
+# bayes.spamTest()
+ny = feedparser.parse('http://www.nasa.gov/rss/dyn/image_of_the_day.rss')
+sf = feedparser.parse('http://rss.yule.sohu.com/rss/yuletoutiao.xml')
+vocabList, pSF, pNY = bayes.localWords(ny, sf)
+print(len(sf['entries']))
