@@ -15,5 +15,6 @@ import bayes
 # print('-------------------pAb----------------------')
 # print(pAb)
 # bayes.testingNB()
-emailText = open('/home/zj/sourcecode/machinelearninginaction/Ch04/email/ham/6.txt', encoding="latin-1").read()
-print(emailText)
+# emailText = open('/home/zj/sourcecode/machinelearninginaction/Ch04/email/ham/6.txt', encoding="latin-1").read()
+# print(emailText)
+bayes.spamTest()

@@ -117,16 +117,16 @@ def textParse(bigString):
 def spamTest():
     docList = [];classList = [];fullText = []
     for i in range(1, 26):
-        wordList = textParse(open('/home/zj/sourcecode/machinelearninginaction/Ch04/email/spam/%d.txt' % i).read())
+        wordList = textParse(open('/home/zj/sourcecode/machinelearninginaction/Ch04/email/spam/%d.txt' % i, encoding="latin-1").read())
         docList.append(wordList)
         fullText.extend(wordList)
         classList.append(1)
-        wordList = textParse(open('/home/zj/sourcecode/machinelearninginaction/Ch04/email/ham/%d.txt' % i).read())
+        wordList = textParse(open('/home/zj/sourcecode/machinelearninginaction/Ch04/email/ham/%d.txt' % i, encoding="latin-1").read())
         docList.append(wordList)
         fullText.extend(wordList)
         classList.append(0)
     vocabList = createVocabList(docList)
-    trainingSet = range(50);testSet = []
+    trainingSet = list(range(50));testSet = []
     for i in range(10):
         randIndex = int(random.uniform(0, len(trainingSet)))
         testSet.append(trainingSet[randIndex])
@@ -141,4 +141,5 @@ def spamTest():
         wordVector = setOfWords2Vec(vocabList, docList[docIndex])
         if classifyNB(array(wordVector), p0V, p1V, pSpam) != classList[docIndex]:
             errorCount += 1
+            print("classification error", docList[docIndex])
     print('the error rate is:', float(errorCount) / len(testSet))
