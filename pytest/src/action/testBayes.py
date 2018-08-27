@@ -21,5 +21,6 @@ import feedparser
 # bayes.spamTest()
 ny = feedparser.parse('http://www.nasa.gov/rss/dyn/image_of_the_day.rss')
 sf = feedparser.parse('http://rss.yule.sohu.com/rss/yuletoutiao.xml')
-vocabList, pSF, pNY = bayes.localWords(ny, sf)
-print(len(sf['entries']))
+# vocabList, pSF, pNY = bayes.localWords(ny, sf)
+# print(len(sf['entries']))
+bayes.getTopWords(ny, sf)
