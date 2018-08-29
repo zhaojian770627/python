@@ -4,7 +4,7 @@ from numpy import *
 def loadDataSet():
     dataMat = []
     labelMat = []
-    fr = open('/home/zj/github/machinelearninginaction/Ch05/testSet.txt')
+    fr = open('/home/zj/sourcecode/machinelearninginaction/Ch05/testSet.txt')
     for line in fr.readlines():
         lineArr = line.strip().split()
         dataMat.append([1.0, float(lineArr[0]), float(lineArr[1])])
@@ -27,7 +27,20 @@ def gradAscent(dataMatIn, classLabels):
     for k in range(maxCycles):
         h = sigmoid(dataMatrix * weights)
         error = (labelMat - h)
+        print('第 {} 次循环，error[0]= {}'.format(k + 1, error[0]))
+
         weights = weights + alpha * dataMatrix.transpose() * error
+    return weights
+
+
+def stocGradAscent0(dataMatrix, classLabels):
+    m, n = shape(dataMatrix)
+    alpha = .01
+    weights = ones(n)
+    for i in range(m):
+        h = sigmoid(sum(dataMatrix[i] * weights))
+        error = (classLabels[i] - h)
+        weights = weights + alpha * error * dataMatrix[i]
     return weights
 
 
