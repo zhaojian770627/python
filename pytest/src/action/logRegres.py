@@ -50,6 +50,7 @@ def plotBestFit(weights):
     ax.scatter(xcord1, ycord1, s=30, c='red', marker='s')
     ax.scatter(xcord2, ycord2, s=30, c='green')
     x = arange(-3.0, 3.0, 0.1)
+    # 最佳拟合直线     
     y = (-weights[0] - weights[1] * x) / weights[2]
     ax.plot(x, y)
     plt.xlabel('x1')
