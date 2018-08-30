@@ -3,6 +3,7 @@ import logRegres
 
 dataArr, labelMat = logRegres.loadDataSet()
 # print(logRegres.gradAscent(dataArr, labelMat))
-# weights = logRegres.gradAscent(dataArr, labelMat)
-weights = logRegres.stocGradAscent0(array(dataArr), labelMat)
-logRegres.plotBestFit(weights)
+weights = logRegres.gradAscent(dataArr, labelMat)
+logRegres.plotWeight()
+# weights = logRegres.stocGradAscent0(array(dataArr), labelMat)
+# logRegres.plotBestFit(weights)

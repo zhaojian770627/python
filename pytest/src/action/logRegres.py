@@ -1,5 +1,7 @@
 from numpy import *
 
+ws = []
+
 
 def loadDataSet():
     dataMat = []
@@ -27,9 +29,8 @@ def gradAscent(dataMatIn, classLabels):
     for k in range(maxCycles):
         h = sigmoid(dataMatrix * weights)
         error = (labelMat - h)
-        print('第 {} 次循环，error[0]= {}'.format(k + 1, error[0]))
-
         weights = weights + alpha * dataMatrix.transpose() * error
+        ws.append(weights)
     return weights
 
 
@@ -42,6 +43,35 @@ def stocGradAscent0(dataMatrix, classLabels):
         error = (classLabels[i] - h)
         weights = weights + alpha * error * dataMatrix[i]
     return weights
+
+
+def stocGradAscent1(dataMatrix, classLabels, numIter=150):
+    m, n = shape(dataMatrix)
+    weights = ones(n)
+    dataIndex = range(m)
+    for j in range(numIter):
+        dataIndex = range(m)
+        for i in range(m):
+            alpha = 4 / (1.0 + j + i) + .01
+            randIndex = int(random.uniform(0, len(dataIndex)))
+            h = sigmoid(sum(dataMatrix[randIndex] * weights))
+            error = (classLabels[randIndex] - h)
+            weights = weights + alpha * error * dataMatrix[randIndex]
+            del(dataIndex[randIndex])
+    return weights
+
+
+def plotWeight():
+    import matplotlib.pyplot as plt
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    # 最佳拟合直线     
+    x = arange(1, 501, 1)
+    y = [w[2, 0] for w in ws ]
+    ax.plot(x, y)
+    plt.xlabel('x1')
+    plt.ylabel('x2')
+    plt.show()
 
 
 def plotBestFit(weights):
