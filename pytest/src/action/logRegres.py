@@ -30,7 +30,7 @@ def gradAscent(dataMatIn, classLabels):
         h = sigmoid(dataMatrix * weights)
         error = (labelMat - h)
         weights = weights + alpha * dataMatrix.transpose() * error
-        ws.append(weights)
+#         ws.append(weights)
     return weights
 
 
@@ -50,7 +50,7 @@ def stocGradAscent1(dataMatrix, classLabels, numIter=150):
     weights = ones(n)
     dataIndex = range(m)
     for j in range(numIter):
-        dataIndex = range(m)
+        dataIndex = list(range(m))
         for i in range(m):
             alpha = 4 / (1.0 + j + i) + .01
             randIndex = int(random.uniform(0, len(dataIndex)))
