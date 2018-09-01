@@ -68,8 +68,8 @@ def classifyVector(inX, weights):
 
 
 def colicTest():
-    frTrain = open('horseColicTraining.txt')
-    frTest = open('horseColicTest.txt')
+    frTrain = open('/home/zj/sourcecode/machinelearninginaction/Ch05/horseColicTraining.txt')
+    frTest = open('/home/zj/sourcecode/machinelearninginaction/Ch05/horseColicTest.txt')
     trainingSet = []
     trainingLabels = []
     for line in frTrain.readlines():
@@ -89,7 +89,7 @@ def colicTest():
         lineArr = []
         for i in range(21):
             lineArr.append(float(currLine[i]))
-        if int(classifyVector(array[lineArr], trainWeights)) != int(currLine[21]):
+        if int(classifyVector(array(lineArr), trainWeights)) != int(currLine[21]):
             errorCount += 1
     errorRate = (float(errorCount) / numTestVec)
     print("the error rate of this test is:%f" % errorRate)
