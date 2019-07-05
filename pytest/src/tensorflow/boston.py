@@ -14,6 +14,9 @@ def normalize(X):
 boston = tf.contrib.learn.datasets.load_dataset('boston')
 X_train, Y_train = boston.data[:, 5], boston.target
 # X_train=normalize(X_train) # This step is optional here
+
+n_samples = len(X_train)
+
 X = tf.placeholder(tf.float32, name='X')
 Y = tf.placeholder(tf.float32, name='Y')
 
@@ -40,10 +43,10 @@ with tf.Session() as sess:
         writer.close()
         b_value, w_value = sess.run([b, w])
 
-Y_pred=X_train*w_value+b_value
+Y_pred = X_train * w_value + b_value
 print('Done')
-plt.plot(X_train,Y_train,'bo',label='Real Data')
-plt.plot(X_train,Y_pred,'bo',label='Predicted Data')
+plt.plot(X_train, Y_train, 'bo', label='Real Data')
+plt.plot(X_train, Y_pred, 'bo', label='Predicted Data')
 plt.legend()
 plt.show()
 plt.plot(total)
