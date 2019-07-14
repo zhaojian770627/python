@@ -1,5 +1,5 @@
 import tensorflow as tf
-import matplotlib.pyplot as plt
+import pylab 
 
 from tensorflow.examples.tutorials.mnist import input_data
 
@@ -34,40 +34,31 @@ model_path = "/home/zj/temp/tensorflow/save/521model.ckpt"
 
 plotdata = { "batchsize":[], "loss":[] }
 
+# 读取模型
+print("Starting 2nd session...")
 with tf.Session() as sess:
+    # Initialize variables
     sess.run(tf.global_variables_initializer())
+    # Restore model weights from previously saved model
+    saver.restore(sess, model_path)
     
-    for epoch in range(training_epochs):
-        avg_cost = 0.
-        total_batch = int(mnist.train.num_examples / batch_size)
-        for i in range(total_batch):
-            batch_xs, batch_ys = mnist.train.next_batch(batch_size)
-
-            _, c = sess.run([optimizer, cost], feed_dict={X:batch_xs.T, Y:batch_ys.T})
-            avg_cost += c / total_batch
-
-        if(epoch + 1) % display_step == 0:
-            plotdata["batchsize"].append(epoch)
-            plotdata["loss"].append(avg_cost)
-            print ("Epoch:", '%04d' % (epoch + 1), "cost=", "{:.9f}".format(avg_cost))
-            
-    print(" Finished!")
-
-    plotdata["avgloss"] = moving_average(plotdata["loss"], w=25)
-    plt.plot(plotdata["batchsize"], plotdata["avgloss"], 'b--')
-    plt.xlabel("Minibatch number")
-    plt.ylabel("Loss")
-    plt.title("Minibatch run vs. Training loss")
-    
-    plt.show()
-
-    # 测试model
-    print(pred.shape)
+    # 测试 model
     correct_prediction = tf.equal(tf.argmax(pred, 0), tf.argmax(Y, 0))
     # 计算准确率
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     print ("Accuracy:", accuracy.eval({X: mnist.test.images.T, Y: mnist.test.labels.T}))
     
-    save_path = saver.save(sess, model_path)
-    print("Model saved in file: %s" % save_path)
+    output = tf.argmax(pred, 1)
+    batch_xs, batch_ys = mnist.train.next_batch(2)
+    outputval, predv = sess.run([output, pred], feed_dict={X: batch_xs.T})
+    print(outputval, predv, batch_ys.T)
 
+    im = batch_xs[0]
+    im = im.reshape(-1, 28)
+    pylab.imshow(im)
+    pylab.show()
+    
+    im = batch_xs[1]
+    im = im.reshape(-1, 28)
+    pylab.imshow(im)
+    pylab.show()
