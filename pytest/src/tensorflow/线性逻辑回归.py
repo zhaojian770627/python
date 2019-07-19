@@ -35,6 +35,8 @@ def showimage():
     plt.show()
 
 
+tf.random.set_random_seed(1)
+
 input_dim = 2                    
 np.random.seed(10)
 num_classes = 2
@@ -46,14 +48,14 @@ X, Y = generate(1000, mean, cov, [3.0], True)
 
 lab_dim = 1
 # tf Graph Input
-input_features = tf.placeholder(tf.float32, [None, input_dim])
-input_labels = tf.placeholder(tf.float32, [None, lab_dim])
+input_features = tf.placeholder(tf.float32, [input_dim, None ])
+input_labels = tf.placeholder(tf.float32, [lab_dim, None])
 
 # Set model weights
-W = tf.Variable(tf.random_normal([input_dim, lab_dim]), name="weight")
-b = tf.Variable(tf.zeros([lab_dim]), name="bias")
+W = tf.Variable(tf.random_normal([lab_dim, input_dim ]), name="weight")
+b = tf.Variable(tf.zeros([lab_dim, 1]), name="bias")
 
-output = tf.nn.sigmoid(tf.matmul(input_features, W) + b)
+output = tf.nn.sigmoid(tf.matmul(W, input_features) + b)
 cross_entropy = -(input_labels * tf.log(output) + (1 - input_labels) * tf.log(1 - output))
 
 ser = tf.square(input_labels - output)
@@ -77,11 +79,11 @@ with tf.Session() as sess:
             x1 = X[i * minibatchSize:(i + 1) * minibatchSize, :]
             y1 = np.reshape(Y[i * minibatchSize:(i + 1) * minibatchSize], [-1, 1])
             tf.reshape(y1, [-1, 1])
-            _, lossval, outputval, errval = sess.run([train, loss, output, err], feed_dict={input_features: x1, input_labels:y1})
+            _, lossval, outputval, errval = sess.run([train, loss, output, err], feed_dict={input_features: x1.T, input_labels:y1.T})
             sumerr = sumerr + errval
         
         print ("Epoch:", '%04d' % (epoch + 1), "cost=", "{:.9f}".format(lossval), "err=", sumerr / np.int32(len(Y) / minibatchSize))
-        
+
     # 图形显示
     train_X, train_Y = generate(100, mean, cov, [3.0], True)
     colors = ['r' if l == 0 else 'b' for l in train_Y[:]]
@@ -91,8 +93,9 @@ with tf.Session() as sess:
 
 #    x1w1+x2*w2+b=0
 #    x2=-x1* w1/w2-b/w2
+    print(sess.run(W)[0][1])
     x = np.linspace(-1, 8, 200) 
-    y = -x * (sess.run(W)[0] / sess.run(W)[1]) - sess.run(b) / sess.run(W)[1]
+    y = -x * (sess.run(W)[0][0] / sess.run(W)[0][1]) - sess.run(b)[0] / sess.run(W)[0][1]
     plt.plot(x, y, label='Fitted line')
     plt.legend()
     plt.show() 
