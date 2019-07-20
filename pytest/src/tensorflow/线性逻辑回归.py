@@ -36,9 +36,9 @@ def showimage():
 
 
 tf.random.set_random_seed(1)
+np.random.seed(1)
 
 input_dim = 2                    
-np.random.seed(10)
 num_classes = 2
 mean = np.random.randn(num_classes)
 cov = np.eye(num_classes) 
@@ -93,7 +93,6 @@ with tf.Session() as sess:
 
 #    x1w1+x2*w2+b=0
 #    x2=-x1* w1/w2-b/w2
-    print(sess.run(W)[0][1])
     x = np.linspace(-1, 8, 200) 
     y = -x * (sess.run(W)[0][0] / sess.run(W)[0][1]) - sess.run(b)[0] / sess.run(W)[0][1]
     plt.plot(x, y, label='Fitted line')
