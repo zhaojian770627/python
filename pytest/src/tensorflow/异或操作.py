@@ -34,7 +34,8 @@ layer_2 = tf.add(tf.matmul(weights['h2'], layer_1), biases['h2'])
 
 # Leaky relus 在ReLU基础上， 保留一部分负值， 让x为负时乘0.01， 即Leaky relus对负信号不
 # 是一味地拒绝， 而是缩小。
-y_pred = tf.maximum(layer_2, 0.01 * layer_2)
+# y_pred = tf.maximum(layer_2, 0.01 * layer_2)
+y_pred = tf.sigmoid(layer_2)
 
 loss = tf.reduce_mean((y_pred - y) ** 2)
 train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)
