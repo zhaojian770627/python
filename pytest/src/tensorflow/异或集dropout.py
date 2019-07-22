@@ -52,7 +52,7 @@ tf.random.set_random_seed(1)
 
 input_dim = 2
 num_classes = 4 
-X, Y = generate(320, num_classes, [[3.0, 0], [3.0, 3.0], [0, 3.0]], True)
+X, Y = generate(120, num_classes, [[3.0, 0], [3.0, 3.0], [0, 3.0]], True)
 
 # 将其中的两类数据合并
 Y = Y % 2
@@ -73,7 +73,7 @@ plt.show()
 # 转换为列
 Y = np.reshape(Y, [-1, 1])
 
-learning_rate = 1e-4
+learning_rate = .01
 n_input = 2
 n_label = 1
 # n_hidden = 2  # 欠拟合
@@ -100,16 +100,26 @@ biases = {
     }  
 
 layer_1 = tf.nn.relu(tf.add(tf.matmul(weights['h1'], x), biases['h1']))
-layer_2 = tf.add(tf.matmul(weights['h2'], layer_1), biases['h2'])
+
+# dropout层
+keep_prob = tf.placeholder("float")
+layer_1_drop = tf.nn.dropout(layer_1, keep_prob)
+
+layer_2 = tf.add(tf.matmul(weights['h2'], layer_1_drop), biases['h2'])
 
 # Leaky relus 在ReLU基础上， 保留一部分负值， 让x为负时乘0.01， 即Leaky relus对负信号不
 # 是一味地拒绝， 而是缩小。
 y_pred = tf.maximum(layer_2, 0.01 * layer_2)
 # y_pred = tf.sigmoid(layer_2)
 
-reg = 0.01 
-loss = tf.reduce_mean((y_pred - y) ** 2) + tf.nn.l2_loss(weights['h1']) * reg + tf.nn.l2_loss(weights['h2']) * reg
-train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)
+loss = tf.reduce_mean((y_pred - y) ** 2)
+
+# 退化学习率技术
+global_step = tf.Variable(0, trainable=False)
+decaylearning_rate = tf.train.exponential_decay(learning_rate, global_step, 1000, 0.9)
+train_step = tf.train.AdamOptimizer(decaylearning_rate).minimize(loss)
+
+# train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)
 
 # 加载
 with tf.Session() as sess:
@@ -117,12 +127,11 @@ with tf.Session() as sess:
 
     # 训练
     for i in range(20000):
-#         增大数据集
-        X, Y = generate(1000,num_classes,  [[3.0,0],[3.0,3.0],[0,3.0]],True)
-        Y=Y%2
-        Y=np.reshape(Y,[-1,1])
+#         X, Y = generate(1000, num_classes, [[3.0, 0], [3.0, 3.0], [0, 3.0]], True)
+#         Y = Y % 2
+#         Y = np.reshape(Y, [-1, 1])
         
-        _, loss_val = sess.run([train_step, loss], feed_dict={x:X.T, y:Y.T})
+        _, loss_val = sess.run([train_step, loss], feed_dict={x:X.T, y:Y.T, keep_prob:0.6})
         
         if i % 1000 == 0:
             print ("Step:", i, "Current loss:", loss_val)
@@ -151,7 +160,9 @@ with tf.Session() as sess:
             classification_plane[i, j] = sess.run(y_pred, feed_dict={x: [
                                                                            [ xx[i, j]],
                                                                            [ yy[i, j]]
-                                                                        ]})
+                                                                        ],
+                                                                    keep_prob:1.0
+                                                                    })
             classification_plane[i, j] = int(classification_plane[i, j])
 
     # Create a color map to show the classification colors of each grid point
@@ -180,7 +191,7 @@ with tf.Session() as sess:
     plt.scatter(xb[:, 0], xb[:, 1], c='b', marker='o')
     
     yTrain = np.reshape(yTrain, [-1, 1])           
-    print ("loss:\n", sess.run(loss, feed_dict={x: xTrain.T, y: yTrain.T}))          
+    print ("loss:\n", sess.run(loss, feed_dict={x: xTrain.T, y: yTrain.T, keep_prob:1.0}))          
     
     nb_of_xs = 200
     xs1 = np.linspace(-1, 8, num=nb_of_xs)
@@ -194,7 +205,8 @@ with tf.Session() as sess:
             classification_plane[i, j] = sess.run(y_pred, feed_dict={x: [
                                                                             [ xx[i, j]],
                                                                             [ yy[i, j]]
-                                                                        ]
+                                                                        ],
+                                                                    keep_prob:1.0
                                                                     })
             classification_plane[i, j] = int(classification_plane[i, j])
     
