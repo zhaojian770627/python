@@ -30,7 +30,7 @@ output_dim = 1  # 输出维度为1
 # 初始化网络
 synapse_0 = (2 * np.random.random((input_dim, hidden_dim)) - 1) * .05  # 维度为2*16,2是输入维度，16是隐藏层维度
 synapse_1 = (2 * np.random.random((hidden_dim, output_dim)) - 1) * .05
-synapse_h = (2 * np.random.reandom((hidden_dim, hidden_dim)) - 1) * .05
+synapse_h = (2 * np.random.random((hidden_dim, hidden_dim)) - 1) * .05
 
 # 用于存放反向传播的权重更新值
 synapse_0_update = np.zeros_like(synapse_0)
